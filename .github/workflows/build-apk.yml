@@ -1,0 +1,55 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.4'
+          channel: 'stable'
+          cache: true
+
+      - name: Create Flutter project structure
+        run: |
+          # Create a temporary full Flutter project
+          flutter create --org com.jarvis --project-name jarvis temp_jarvis
+          # Copy our custom files over the generated ones
+          cp -r lib temp_jarvis/
+          cp pubspec.yaml temp_jarvis/
+          cp -r android/app/src/main/AndroidManifest.xml temp_jarvis/android/app/src/main/ 2>/dev/null || true
+          cp -r android/app/src/main/kotlin temp_jarvis/android/app/src/main/ 2>/dev/null || true
+          cp -r android/app/src/main/res/values temp_jarvis/android/app/src/main/res/ 2>/dev/null || true
+          # Move everything back
+          rm -rf lib android ios web test
+          cp -r temp_jarvis/* .
+          cp -r temp_jarvis/.* . 2>/dev/null || true
+          rm -rf temp_jarvis
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release --no-tree-shake-icons
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: jarvis-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
