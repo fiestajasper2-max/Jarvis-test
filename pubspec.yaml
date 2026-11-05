@@ -1,0 +1,52 @@
+name: jarvis
+description: A Jarvis-style AI assistant for Android with voice, memory, and holographic UI.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI & Animation
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
+
+  # AI & Network
+  http: ^1.2.2
+  dio: ^5.7.0
+
+  # Voice
+  speech_to_text: ^7.0.0
+  flutter_tts: ^4.0.2
+
+  # Local Storage / Memory
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.1.4
+  shared_preferences: ^2.3.2
+
+  # Phone features
+  android_intent_plus: ^5.1.0
+  permission_handler: ^11.3.1
+  url_launcher: ^6.3.0
+  intl: ^0.19.0
+
+  # Utils
+  provider: ^6.1.2
+  uuid: ^4.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.12
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
